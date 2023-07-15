@@ -1,0 +1,6 @@
+---
+# defaults file for apache_httpd
+http_port: 80
+content_dir: /var/web/website
+admin: rupert
+

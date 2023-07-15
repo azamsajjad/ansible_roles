@@ -1,0 +1,32 @@
+---
+- name: set http context for new directory
+  sefcontext:
+    target: "{{ content_dir }}(/.*)?"
+    setype: httpd_sys_content_t
+    state: present
+- name: run restorecon
+  command: restorecon -irv {{ content_dir }}
+
+- name: copy httpd configuration file template
+  template:
+    src: httpd.conf.j2
+    dest: /etc/httpd/conf/httpd.conf
+    backup: yes
+  notify: "restart_apache"
+
+- name: create index.html landing page from template
+  template:
+    src: index.html.j2
+    dest: "{{ content_dir }}/index.html"
+    owner: apache
+    group: apache
+    mode: 0755
+
+- name: create firewall rule for custom port opening
+  firewalld:
+    port: "{{ http_port }}"
+    state: enabled
+    immediate: yes
+    permanent: yes
+  notify: "restart_firewalld"
+

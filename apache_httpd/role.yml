@@ -1,0 +1,22 @@
+---
+- name: playbook to run apache_httpd role
+  hosts: node1
+  become: yes
+  tasks:
+    - include_role:
+        name: apache_httpd
+      vars:
+        http_port: 8080
+
+# variable defined here overrides variables defined in defaults/
+# total defined variables in the role: 3
+# {{ http_port }}
+# {{ content_dir }}
+# {{ admin }}
+#
+# another way to define this playbook
+# - name: 
+#   hosts:
+#   become:
+#   roles:
+#     - apache_httpd
