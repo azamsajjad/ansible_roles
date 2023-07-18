@@ -1,0 +1,3 @@
+2023-07-18T19:27:50.553077+00:00 WARNING 'ansible_navigator.actions.inventory._update_args' Configuration errors encountered, rolling back to previous configuration.
+2023-07-18T19:27:50.602885+00:00 WARNING 'ansible_navigator.actions.inventory._update_args' Issues were found while applying the settings.
+2023-07-18T19:27:50.602977+00:00 WARNING 'ansible_navigator.actions.inventory._update_args' An inventory is required when using the inventory subcommand
