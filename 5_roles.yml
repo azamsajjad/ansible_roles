@@ -1,0 +1,31 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: update repo index
+      dnf:
+        update_cache: yes
+      tags: always
+      changed_when: false
+      when: ansible_distribution == "RedHat"
+
+- hosts: all
+  become: true
+  roles:
+    - base
+
+- hosts: node1
+  become: true
+  roles:
+    - file_servers
+    - workstations
+
+- hosts: node2
+  become: true
+  roles:
+    - web_servers
+
+- hosts: node3
+  become: true
+  roles:
+    - db_servers
