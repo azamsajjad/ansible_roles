@@ -1,2 +1,30 @@
 ---
 # tasks file for workstations
+- name: install unzip
+  package:
+    name: unzip
+    state: present
+      
+- name: install yum-utils
+  block:
+    - yum:
+        name: yum-utils
+        state: present
+
+    - name: enable repo
+      command: "yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo"
+
+    - name: install terraform
+      yum:
+        name: terraform
+        state: present
+  rescue:
+    - name: install terraform
+      unarchive:
+        src: https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip
+        dest: /tmp
+        remote_src: yes
+        mode: 0755
+        owner: root
+        group: root
+  

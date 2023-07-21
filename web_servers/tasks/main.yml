@@ -1,2 +1,50 @@
 ---
 # tasks file for web_servers
+- name: install httpd package
+  tags: apache,redhat
+  dnf:
+    name:
+      - httpd
+      - php
+    state: latest
+  when: ansible_distribution == "RedHat"
+
+- name: install httpd package
+  apt:
+    name:
+      - httpd
+      - libapache2-mod-php
+    state: latest
+  when: ansible_distribution == "Ubuntu"  
+
+- name: state and enable httpd service
+  tags: apache,redhat
+  service:
+    name: httpd
+    state: started
+    enabled: true
+  when: ansible_distribution == "RedHat"
+
+- name: change email address for admin
+  tags: apache,redhat
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '^ServerAdmin'
+    line: ServerAdmin rupert@server2
+  register: httpd
+  when: ansible_distribution == "RedHat"
+
+- name: restart httpd
+  service:
+    name: httpd
+    state: restarted
+  when: httpd.changed
+
+- name: copy index.html
+  tags: index
+  template: 
+    src: index.html.j2
+    dest: /var/www/html/index.html
+    owner: apache
+    group: apache
+    mode: 0644
